@@ -15,7 +15,7 @@ Se você já clonou o projeto **sem** essa flag, a pasta `api/account` vai apare
 \`\`\`bash
 git submodule update --init --recursive
 \`\`\`
-
+https://github.com/insper-plat-projeto/pma.git
 ### Atualizando o submódulo para a versão mais recente
 
 \`\`\`bash
