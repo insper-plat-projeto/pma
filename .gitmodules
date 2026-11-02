@@ -4,3 +4,6 @@
 [submodule "api/account-service"]
 	path = api/account-service
 	url = https://github.com/insper-plat-projeto/pma-account-service.git
+[submodule "pma-gateway-service"]
+	path = pma-gateway-service
+	url = https://github.com/insper-plat-projeto/pma-gateway-service.git
