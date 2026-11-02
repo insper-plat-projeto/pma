@@ -8,5 +8,5 @@
 	path = api/gateway-service
 	url = https://github.com/insper-plat-projeto/pma-gateway-service.git
 [submodule "pma-auth"]
-	path = pma-auth
+	path = api/auth
 	url = https://github.com/insper-plat-projeto/pma-auth.git
