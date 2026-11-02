@@ -1,0 +1,8 @@
+name: store
+
+services:
+  gateway:
+    build:
+      context: ./gateway-service
+    ports:
+      - 8080:8080
