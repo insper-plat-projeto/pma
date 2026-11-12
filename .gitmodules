@@ -10,3 +10,6 @@
 [submodule "pma-auth"]
 	path = api/auth
 	url = https://github.com/insper-plat-projeto/pma-auth.git
+[submodule "api/exchange-service"]
+	path = api/exchange-service
+	url = https://github.com/insper-plat-projeto/pma-exchange-service.git
