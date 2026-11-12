@@ -25,3 +25,11 @@ services:
       DATABASE_PASSWORD: ${DB_PASSWORD:-store}
     depends_on:
       - db
+
+  exchange:
+    build:
+      context: ./exchange-service
+      dockerfile: Dockerfile
+    # no ports: reached only through the gateway, at http://exchange:8080
+    environment:
+      PYTHONUNBUFFERED: 1
