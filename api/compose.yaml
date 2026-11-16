@@ -23,8 +23,11 @@ services:
       DATABASE_DB: ${DB_NAME:-store}
       DATABASE_USERNAME: ${DB_USER:-store}
       DATABASE_PASSWORD: ${DB_PASSWORD:-store}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
     depends_on:
       - db
+      - redis
 
   exchange:
     build:
@@ -33,3 +36,14 @@ services:
     # no ports: reached only through the gateway, at http://exchange:8080
     environment:
       PYTHONUNBUFFERED: 1
+
+  redis:
+    image: redis:7-alpine
+    hostname: redis
+    # no ports: only the services reach it; inspect with docker compose exec redis redis-cli
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes
+
+volumes:
+  redis_data:
