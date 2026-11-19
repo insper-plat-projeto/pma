@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Store · Cadastro</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="store.js" defer></script>
+</head>
+<body data-page="register">
+  <nav id="nav"></nav>
+  <main>
+    <h1>Cadastro</h1>
+    <form id="register-form">
+      <label>Nome <input id="name" required maxlength="256" autocomplete="name"></label>
+      <label>E-mail <input id="email" type="email" required maxlength="256" autocomplete="email"></label>
+      <label>Senha <input id="password" type="password" required minlength="6" autocomplete="new-password"></label>
+      <button type="submit">Criar conta</button>
+    </form>
+    <p id="message" role="status"></p>
+  </main>
+</body>
+</html>
