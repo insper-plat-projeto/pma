@@ -1,0 +1,344 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <title>Teste da API de contas</title>
+  <style>
+    :root {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: #17212b;
+      background: #f3f6f8;
+      font-synthesis: none;
+      text-rendering: optimizeLegibility;
+    }
+    * { box-sizing: border-box; }
+    body { margin: 0; }
+    main { width: min(1080px, calc(100% - 32px)); margin: 36px auto 64px; }
+    header { margin-bottom: 24px; }
+    h1 { margin: 0 0 8px; font-size: clamp(1.7rem, 4vw, 2.35rem); letter-spacing: -.04em; }
+    h2 { margin: 0 0 16px; font-size: 1.12rem; }
+    p { color: #586572; line-height: 1.55; }
+    .subhead { margin: 0; }
+    .card { margin: 16px 0; padding: 22px; border: 1px solid #dce3e8; border-radius: 14px; background: #fff; box-shadow: 0 5px 20px #192d3b0a; }
+    .config { display: grid; grid-template-columns: minmax(240px, 1fr) auto; gap: 12px; align-items: end; }
+    .grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+    label { display: grid; gap: 6px; color: #465360; font-size: .9rem; font-weight: 600; }
+    input { width: 100%; min-height: 42px; padding: 9px 11px; border: 1px solid #cbd5dc; border-radius: 8px; color: #17212b; background: #fff; font: inherit; }
+    input:focus { outline: 3px solid #b8d9f6; border-color: #2878bd; }
+    button { min-height: 40px; padding: 9px 14px; border: 0; border-radius: 8px; color: #fff; background: #1769aa; font: inherit; font-weight: 650; cursor: pointer; }
+    button:hover { background: #10568e; }
+    button.secondary { color: #20303d; background: #eaf0f4; }
+    button.secondary:hover { background: #dce6ed; }
+    button.danger { background: #b63838; }
+    button:disabled { opacity: .6; cursor: wait; }
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+    .hint { margin: 8px 0 0; font-size: .86rem; }
+    .notice { padding: 12px 14px; border-left: 4px solid #cf9b25; border-radius: 6px; background: #fff8e8; color: #5e4a19; }
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th, td { padding: 10px 9px; border-bottom: 1px solid #e5eaee; vertical-align: top; }
+    th { color: #596674; font-size: .82rem; }
+    td { overflow-wrap: anywhere; font-size: .91rem; }
+    code { font-family: ui-monospace, SFMono-Regular, Consolas, monospace; }
+    #events { display: grid; gap: 9px; padding: 0; margin: 0; list-style: none; }
+    #events li { padding: 12px; border: 1px solid #e1e7eb; border-radius: 8px; background: #fbfcfd; }
+    #events li[data-kind="error"] { border-color: #efc5c5; background: #fff7f7; }
+    .event-head { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; font-size: .9rem; }
+    .badge { padding: 2px 7px; border-radius: 99px; color: #174f33; background: #e1f4e9; font-size: .76rem; font-weight: 700; }
+    .badge.error { color: #8b2727; background: #fde6e6; }
+    pre { overflow: auto; max-height: 240px; margin: 9px 0 0; padding: 10px; border-radius: 6px; background: #f0f3f5; font-size: .82rem; white-space: pre-wrap; overflow-wrap: anywhere; }
+    @media (max-width: 650px) { main { margin-top: 22px; } .card { padding: 17px; } .config, .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>Teste da API de contas</h1>
+      <p class="subhead">Faça chamadas para os endpoints do <code>account-service</code>, acompanhe os status HTTP e confira as contas retornadas.</p>
+    </header>
+
+    <section class="card config" aria-label="Configuração da API">
+      <label for="api-base">URL base da API
+        <input id="api-base" type="url" value="http://localhost:8080" autocomplete="url">
+      </label>
+      <button id="health-button" class="secondary" type="button">Verificar saúde</button>
+    </section>
+
+    <p class="notice">Sirva esta pasta em <code>http://localhost:3000</code> para que o navegador possa acessar a API. O serviço aceita essa origem local para os testes.</p>
+
+    <section class="card">
+      <h2>Executar fluxo completo</h2>
+      <p>Cria uma conta temporária, busca por ID, confere a listagem, testa senha curta, exclui a conta e confirma o <code>404</code>. O registro temporário é removido ao final.</p>
+      <button id="flow-button" type="button">Executar testes de ponta a ponta</button>
+    </section>
+
+    <section class="card">
+      <h2>Criar conta</h2>
+      <form id="create-form">
+        <div class="grid">
+          <label for="name">Nome<input id="name" name="name" required maxlength="256" value="Conta de teste"></label>
+          <label for="email">E-mail<input id="email" name="email" type="email" required maxlength="256" placeholder="voce@exemplo.com"></label>
+          <label for="password">Senha<input id="password" name="password" type="password" required minlength="6" autocomplete="new-password"></label>
+        </div>
+        <p class="hint">A senha não será exibida nos resultados da página.</p>
+        <div class="actions"><button type="submit">Criar conta</button></div>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Buscar ou excluir por ID</h2>
+      <label for="account-id">ID da conta<input id="account-id" autocomplete="off" placeholder="UUID retornado pela API"></label>
+      <div class="actions">
+        <button id="get-button" class="secondary" type="button">Buscar conta</button>
+        <button id="delete-button" class="danger" type="button">Excluir conta</button>
+        <button id="list-button" class="secondary" type="button">Atualizar listagem</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Contas</h2>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>ID</th><th>Nome</th><th>E-mail</th></tr></thead>
+          <tbody id="account-rows"><tr><td colspan="3">Clique em “Atualizar listagem”.</td></tr></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Resultados das requisições</h2>
+      <ol id="events" aria-live="polite"></ol>
+      <div class="actions"><button id="clear-button" class="secondary" type="button">Limpar resultados</button></div>
+    </section>
+  </main>
+
+  <script>
+    const baseInput = document.querySelector('#api-base');
+    const events = document.querySelector('#events');
+    const rows = document.querySelector('#account-rows');
+    const idInput = document.querySelector('#account-id');
+    const activeButtons = [...document.querySelectorAll('button')];
+
+    function baseUrl() {
+      return baseInput.value.trim().replace(/\/+$/, '');
+    }
+
+    function redact(value) {
+      if (Array.isArray(value)) return value.map(redact);
+      if (value && typeof value === 'object') {
+        return Object.fromEntries(Object.entries(value).map(([key, item]) => [
+          key,
+          /password|hash/i.test(key) ? '[oculto]' : redact(item)
+        ]));
+      }
+      return value;
+    }
+
+    function addEvent(title, result, error = false) {
+      const item = document.createElement('li');
+      item.dataset.kind = error ? 'error' : 'ok';
+      const head = document.createElement('div');
+      head.className = 'event-head';
+      const name = document.createElement('strong');
+      name.textContent = title;
+      const badge = document.createElement('span');
+      badge.className = `badge${error ? ' error' : ''}`;
+      badge.textContent = result.status ? `HTTP ${result.status}` : 'Falha';
+      head.append(name, badge);
+      item.append(head);
+      if (result.detail) {
+        const detail = document.createElement('pre');
+        detail.textContent = result.detail;
+        item.append(detail);
+      }
+      events.prepend(item);
+    }
+
+    async function request(method, path, body) {
+      const options = { method, headers: { Accept: 'application/json' } };
+      if (body !== undefined) {
+        options.headers['Content-Type'] = 'application/json';
+        options.body = JSON.stringify(body);
+      }
+      const started = performance.now();
+      try {
+        const response = await fetch(`${baseUrl()}${path}`, options);
+        const text = await response.text();
+        let data = text;
+        if (text) {
+          try { data = JSON.parse(text); } catch { /* Mantém o texto quando não for JSON. */ }
+        }
+        return {
+          ok: response.ok,
+          status: response.status,
+          headers: response.headers,
+          data,
+          text,
+          elapsed: Math.round(performance.now() - started)
+        };
+      } catch (error) {
+        return {
+          ok: false,
+          status: 0,
+          data: null,
+          text: '',
+          elapsed: Math.round(performance.now() - started),
+          error: `${error.message}. Verifique se a API está ativa e se esta página foi aberta em http://localhost:3000 ou http://127.0.0.1:3000.`
+        };
+      }
+    }
+
+    function describe(result) {
+      if (result.error) return result.error;
+      const body = result.data && typeof result.data === 'object'
+        ? JSON.stringify(redact(result.data), null, 2)
+        : (result.text || '(sem corpo)');
+      return `${result.elapsed} ms\n${body}`;
+    }
+
+    function report(title, result, expected) {
+      const passed = expected.includes(result.status);
+      addEvent(`${passed ? '✓' : '✗'} ${title}`, {
+        status: result.status,
+        detail: `${describe(result)}${expected.length ? `\nEsperado: ${expected.map(code => `HTTP ${code}`).join(' ou ')}` : ''}`
+      }, !passed);
+      return passed;
+    }
+
+    function renderAccounts(accounts) {
+      rows.replaceChildren();
+      if (!accounts.length) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = 3;
+        td.textContent = 'Nenhuma conta encontrada.';
+        tr.append(td);
+        rows.append(tr);
+        return;
+      }
+      for (const account of accounts) {
+        const tr = document.createElement('tr');
+        for (const value of [account.id, account.name, account.email]) {
+          const td = document.createElement('td');
+          td.textContent = value ?? '';
+          tr.append(td);
+        }
+        rows.append(tr);
+      }
+    }
+
+    async function refreshList(logResult = true) {
+      const result = await request('GET', '/accounts');
+      if (result.status === 200 && Array.isArray(result.data)) renderAccounts(result.data);
+      if (logResult) report('GET /accounts', result, [200]);
+      return result;
+    }
+
+    document.querySelector('#health-button').addEventListener('click', async () => {
+      const result = await request('GET', '/accounts/health-check');
+      report('GET /accounts/health-check', result, [200]);
+    });
+
+    document.querySelector('#list-button').addEventListener('click', () => refreshList());
+
+    document.querySelector('#get-button').addEventListener('click', async () => {
+      const id = idInput.value.trim();
+      if (!id) return addEvent('GET /accounts/{id}', { status: 0, detail: 'Informe um ID.' }, true);
+      const result = await request('GET', `/accounts/${encodeURIComponent(id)}`);
+      report(`GET /accounts/${id}`, result, [200]);
+    });
+
+    document.querySelector('#delete-button').addEventListener('click', async () => {
+      const id = idInput.value.trim();
+      if (!id) return addEvent('DELETE /accounts/{id}', { status: 0, detail: 'Informe um ID.' }, true);
+      const result = await request('DELETE', `/accounts/${encodeURIComponent(id)}`);
+      report(`DELETE /accounts/${id}`, result, [204]);
+      await refreshList(false);
+    });
+
+    document.querySelector('#create-form').addEventListener('submit', async event => {
+      event.preventDefault();
+      const payload = {
+        name: document.querySelector('#name').value.trim(),
+        email: document.querySelector('#email').value.trim(),
+        password: document.querySelector('#password').value
+      };
+      const result = await request('POST', '/accounts', payload);
+      report('POST /accounts', result, [201]);
+      document.querySelector('#password').value = '';
+      const listResult = await refreshList(false);
+      const created = Array.isArray(listResult.data)
+        ? listResult.data.find(account => account.email === payload.email)
+        : null;
+      if (created?.id) idInput.value = created.id;
+    });
+
+    document.querySelector('#flow-button').addEventListener('click', async event => {
+      const button = event.currentTarget;
+      button.disabled = true;
+      let createdId = null;
+      const email = `teste-${crypto.randomUUID()}@example.invalid`;
+      const reportApiFailure = result => {
+        if (result.error) addEvent('Falha de conexão', { status: 0, detail: result.error }, true);
+      };
+      try {
+        let result = await request('GET', '/accounts/health-check');
+        reportApiFailure(result);
+        report('GET /accounts/health-check', result, [200]);
+
+        result = await request('POST', '/accounts', {
+          name: 'Conta temporária de teste', email, password: 'Teste123!'
+        });
+        reportApiFailure(result);
+        report('POST /accounts (conta temporária)', result, [201]);
+        const location = result.headers?.get('Location');
+        if (location) createdId = location.split('/').filter(Boolean).at(-1);
+
+        const listResult = await request('GET', '/accounts');
+        reportApiFailure(listResult);
+        if (listResult.status === 200 && Array.isArray(listResult.data)) {
+          const created = listResult.data.find(account => account.email === email);
+          if (created?.id) createdId = created.id;
+        }
+        report('GET /accounts (conta temporária presente)', {
+          ...listResult,
+          status: createdId ? 200 : (listResult.status === 200 ? 404 : listResult.status),
+          data: createdId ? { found: true, id: createdId } : { found: false }
+        }, [200]);
+
+        if (createdId) {
+          idInput.value = createdId;
+          result = await request('GET', `/accounts/${encodeURIComponent(createdId)}`);
+          reportApiFailure(result);
+          report('GET /accounts/{id}', result, [200]);
+        }
+
+        result = await request('POST', '/accounts', {
+          name: 'Conta inválida', email: `invalida-${crypto.randomUUID()}@example.invalid`, password: '123'
+        });
+        reportApiFailure(result);
+        report('POST /accounts (senha com menos de 6 caracteres)', result, [400]);
+
+        if (createdId) {
+          result = await request('DELETE', `/accounts/${encodeURIComponent(createdId)}`);
+          reportApiFailure(result);
+          report('DELETE /accounts/{id}', result, [204]);
+
+          result = await request('GET', `/accounts/${encodeURIComponent(createdId)}`);
+          reportApiFailure(result);
+          report('GET /accounts/{id} após exclusão', result, [404]);
+          createdId = null;
+          await refreshList(false);
+        }
+      } finally {
+        if (createdId) await request('DELETE', `/accounts/${encodeURIComponent(createdId)}`);
+        button.disabled = false;
+      }
+    });
+
+    document.querySelector('#clear-button').addEventListener('click', () => events.replaceChildren());
+  </script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+name: store-web
+
+services:
+
+  web:
+    image: nginx:1.27-alpine # static HTTP server for ./app
+    volumes:
+      - ./app:/usr/share/nginx/html:ro
+    ports:
+      # http://localhost is one of the origins the gateway's CORS allows
+      - "80:80"

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Store · Câmbio</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="store.js" defer></script>
+</head>
+<body data-page="exchange">
+  <nav id="nav"></nav>
+  <main>
+    <h1>Câmbio</h1>
+    <form id="exchange-form">
+      <div class="row">
+        <label>De <input id="from" value="USD" required pattern="[A-Za-z]{3}" maxlength="3" list="currencies"></label>
+        <label>Para <input id="to" value="BRL" required pattern="[A-Za-z]{3}" maxlength="3" list="currencies"></label>
+      </div>
+      <datalist id="currencies">
+        <option value="USD"><option value="BRL"><option value="EUR"><option value="GBP"><option value="JPY"><option value="ARS">
+      </datalist>
+      <button type="submit">Consultar cotação</button>
+    </form>
+    <section id="rate" class="card" hidden>
+      <dl>
+        <dt>Par</dt><dd id="rate-pair"></dd>
+        <dt>Compra</dt><dd id="rate-buy"></dd>
+        <dt>Venda</dt><dd id="rate-sell"></dd>
+        <dt>Data</dt><dd id="rate-date"></dd>
+      </dl>
+    </section>
+    <p id="message" role="status"></p>
+  </main>
+</body>
+</html>
