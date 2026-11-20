@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Store · Conta</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="store.js" defer></script>
+</head>
+<body data-page="conta" class="checking">
+  <nav id="nav"></nav>
+  <main>
+    <h1>Minha conta</h1>
+
+    <section class="card">
+      <dl>
+        <dt>Nome</dt><dd id="account-name"></dd>
+        <dt>E-mail</dt><dd id="account-email"></dd>
+        <dt>ID</dt><dd id="account-id"></dd>
+      </dl>
+    </section>
+
+    <section class="card">
+      <h2>Cache Redis em ação</h2>
+      <p class="muted">
+        <code>GET /accounts/{id}</code> usa <code>@Cacheable</code>: a primeira leitura vai ao Postgres e
+        grava a conta no Redis na chave <code id="cache-key"></code> por 5 minutos; as leituras seguintes
+        saem do Redis. Ao abrir esta página, o <code>/auth/me</code> já leu sua conta (o MISS dela), por isso
+        as consultas aparecem como HIT; depois de 5 minutos sem leituras a chave expira e a próxima volta a ser MISS.
+        Uma conta que não existe responde 404 e não é guardada, então é sempre MISS.
+        O resultado de cada chamada vem dos contadores <code>cache_gets_total</code> que o account-service
+        expõe ao Prometheus.
+      </p>
+
+      <div class="stats">
+        <div><span class="stat-label">Acertos (HIT)</span><span class="stat" id="cache-hits">—</span></div>
+        <div><span class="stat-label">Faltas (MISS)</span><span class="stat" id="cache-misses">—</span></div>
+        <div><span class="stat-label">Taxa de acerto</span><span class="stat" id="cache-ratio">—</span></div>
+      </div>
+
+      <div class="actions">
+        <button type="button" id="probe-mine">Consultar minha conta 5×</button>
+        <button type="button" id="probe-missing" class="secondary">Consultar conta inexistente</button>
+      </div>
+
+      <div class="table-wrap" id="cache-table" hidden>
+        <table>
+          <thead><tr><th>#</th><th>Consulta</th><th>Origem</th><th>Status</th><th>Tempo</th></tr></thead>
+          <tbody id="cache-log"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <p id="message" role="status"></p>
+  </main>
+</body>
+</html>
