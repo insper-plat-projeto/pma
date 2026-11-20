@@ -45,5 +45,29 @@ services:
       - redis_data:/data
     command: redis-server --appendonly yes
 
+  prometheus:
+    image: prom/prometheus:v3.5.0
+    hostname: prometheus
+    ports:
+      - 9090:9090 # UI: Status -> Targets shows each service UP or DOWN
+    volumes:
+      - ${SETUP:-./setup}/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+    depends_on:
+      - account
+      - exchange
+
+  grafana:
+    image: grafana/grafana-enterprise:12.0.0
+    hostname: grafana
+    ports:
+      - 3000:3000 # http://localhost:3000, admin / admin
+    environment:
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - ${SETUP:-./setup}/grafana/provisioning:/etc/grafana/provisioning:ro # Prometheus datasource + dashboard provider
+      - ${SETUP:-./setup}/grafana/dashboards:/var/lib/grafana/dashboards:ro # Store dashboard
+    depends_on:
+      - prometheus
+
 volumes:
   redis_data:

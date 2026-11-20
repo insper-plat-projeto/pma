@@ -1,0 +1,41 @@
+# Prometheus pulls (scrapes) each target every scrape_interval.
+# metrics_path must match the service's endpoint exactly, or the target is DOWN with a 404.
+scrape_configs:
+
+  - job_name: 'AccountMetrics'
+    metrics_path: '/accounts/actuator/prometheus' # management.endpoints.web.base-path + /prometheus
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - account:8080 # Docker hostname, never localhost
+        labels:
+          application: 'Account Application'
+
+  - job_name: 'ExchangeMetrics'
+    metrics_path: '/exchanges/metrics' # prometheus-fastapi-instrumentator in exchange-service
+    scrape_interval: 5s
+    static_configs:
+      - targets:
+        - exchange:8080
+        labels:
+          application: 'Exchange Application'
+
+  # Enable once gateway-service and auth-service add spring-boot-starter-actuator,
+  # micrometer-registry-prometheus and management.endpoints.web.base-path (hands-on 6).
+  # - job_name: 'GatewayMetrics'
+  #   metrics_path: '/gateway/actuator/prometheus'
+  #   scrape_interval: 5s
+  #   static_configs:
+  #     - targets:
+  #       - gateway:8080
+  #       labels:
+  #         application: 'Gateway Application'
+
+  # - job_name: 'AuthMetrics'
+  #   metrics_path: '/auth/actuator/prometheus'
+  #   scrape_interval: 5s
+  #   static_configs:
+  #     - targets:
+  #       - auth:8080
+  #       labels:
+  #         application: 'Auth Application'

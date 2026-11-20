@@ -1,0 +1,9 @@
+apiVersion: 1
+providers:
+  # loads every dashboard JSON in /var/lib/grafana/dashboards at startup
+  - name: store
+    folder: Store
+    type: file
+    allowUiUpdates: true
+    options:
+      path: /var/lib/grafana/dashboards
