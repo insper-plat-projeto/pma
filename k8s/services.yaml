@@ -1,0 +1,178 @@
+# Store microservices. Service names match the Docker Compose hostnames
+# (account, auth, exchange, gateway), so the code runs unchanged on EKS.
+# Images: ${REGISTRY} is replaced by deploy.sh with the Docker Hub user (public images, no pull secret).
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: account
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: account
+  template:
+    metadata:
+      labels:
+        app: account
+    spec:
+      containers:
+        - name: account
+          image: ${REGISTRY}/account:latest
+          env:
+            - name: DATABASE_HOST
+              value: db
+            - name: DATABASE_PORT
+              value: "5432"
+            - name: DATABASE_DB
+              valueFrom: { secretKeyRef: { name: db, key: DB_NAME } }
+            - name: DATABASE_USERNAME
+              valueFrom: { secretKeyRef: { name: db, key: DB_USER } }
+            - name: DATABASE_PASSWORD
+              valueFrom: { secretKeyRef: { name: db, key: DB_PASSWORD } }
+            - name: REDIS_HOST
+              value: redis
+            - name: REDIS_PORT
+              value: "6379"
+          ports:
+            - containerPort: 8080
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { memory: 768Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: account
+spec:
+  selector:
+    app: account
+  ports:
+    - port: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth
+  template:
+    metadata:
+      labels:
+        app: auth
+    spec:
+      containers:
+        - name: auth
+          image: ${REGISTRY}/auth:latest
+          env:
+            - name: JWT_SECRET_KEY
+              valueFrom: { secretKeyRef: { name: jwt, key: JWT_SECRET_KEY } }
+          ports:
+            - containerPort: 8080
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { memory: 768Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth
+spec:
+  selector:
+    app: auth
+  ports:
+    - port: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: exchange
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: exchange
+  template:
+    metadata:
+      labels:
+        app: exchange
+    spec:
+      containers:
+        - name: exchange
+          image: ${REGISTRY}/exchange:latest
+          ports:
+            - containerPort: 8080
+          resources:
+            requests: { cpu: 100m, memory: 128Mi }
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: exchange
+spec:
+  selector:
+    app: exchange
+  ports:
+    - port: 8080
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gateway
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: gateway
+  template:
+    metadata:
+      labels:
+        app: gateway
+    spec:
+      containers:
+        - name: gateway
+          image: ${REGISTRY}/gateway:latest
+          ports:
+            - containerPort: 8080
+          readinessProbe:
+            httpGet: { path: /health-check, port: 8080 }
+            periodSeconds: 5
+          # the HPA compares CPU use against this request
+          resources:
+            requests: { cpu: 250m, memory: 512Mi }
+            limits: { memory: 768Mi }
+---
+# the cluster's entry point: AWS creates a load balancer with a public address
+apiVersion: v1
+kind: Service
+metadata:
+  name: gateway
+spec:
+  type: LoadBalancer
+  selector:
+    app: gateway
+  ports:
+    - port: 80
+      targetPort: 8080
+---
+# bottleneck: horizontal scaling of the gateway under load (1 to 10 pods at 50% CPU)
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: gateway
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: gateway
+  minReplicas: 1
+  maxReplicas: 10
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          type: Utilization
+          averageUtilization: 50
