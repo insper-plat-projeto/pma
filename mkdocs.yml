@@ -1,8 +1,8 @@
-site_name: Platform - Distributed Systems, Containerization, Microservices, Architectures, API, DevOps, Cloud, Orchestration, Cloud Service Models
-site_author: <Your name here>
-site_url: https://<username-studies>.github.io/platform
-repo_url: https://github.com/<username-studies>/platform
-repo_name: github/platform
+site_name: Store - Plataformas, Microsserviços, DevOps e APIs
+site_author: Grupo 11
+site_url: https://insper-plat-projeto.github.io/pma/
+repo_url: https://github.com/insper-plat-projeto/pma
+repo_name: insper-plat-projeto/pma
 
 theme:
   name: material
@@ -130,3 +130,10 @@ extra_javascript:
 
 nav:
   - Home: index.md
+  - Gateway: gateway.md
+  - Auth: auth.md
+  - Bottlenecks: bottlenecks.md
+  - CI/CD: cicd.md
+  - EKS e load test: eks.md
+  - Custos, PaaS e SLA: custos.md
+  - Uso de IA: ia.md
