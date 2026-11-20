@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Store · Loja</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="store.js" defer></script>
+</head>
+<body data-page="loja" class="checking">
+  <nav id="nav"></nav>
+  <main class="wide">
+    <h1>Loja</h1>
+    <p id="rate" class="rate" role="status">Buscando cotação do dólar…</p>
+
+    <div class="shop">
+      <section id="products" class="products" aria-label="Produtos"></section>
+
+      <aside class="card cart" aria-label="Carrinho">
+        <h2>Carrinho</h2>
+        <p id="cart-empty" class="muted">Seu carrinho está vazio.</p>
+        <ul id="cart-items" class="cart-items"></ul>
+        <dl class="totals">
+          <dt>Total</dt><dd id="cart-total-brl">R$ 0,00</dd>
+          <dt>Em dólar</dt><dd id="cart-total-usd">US$ —</dd>
+        </dl>
+        <button type="button" id="checkout" class="primary" disabled>Finalizar compra</button>
+        <p id="checkout-message" role="status"></p>
+
+        <section id="orders-section" hidden>
+          <h3>Minhas compras</h3>
+          <ul id="orders" class="orders"></ul>
+        </section>
+      </aside>
+    </div>
+
+    <p id="message" role="status"></p>
+  </main>
+</body>
+</html>
