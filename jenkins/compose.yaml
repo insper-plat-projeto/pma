@@ -1,0 +1,14 @@
+name: ops
+
+services:
+
+  jenkins:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - 9080:8080 # http://localhost:9080 (8080 is the store's load balancer)
+    volumes:
+      - ${CONFIG:-./config}/jenkins:/var/jenkins_home # plugins, jobs and credentials survive docker compose down
+      - /var/run/docker.sock:/var/run/docker.sock     # pipelines build images on the host's Docker
+    restart: always
