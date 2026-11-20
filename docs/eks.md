@@ -48,7 +48,22 @@ kubectl get pods -l app=gateway --watch
 ./k8s/load-test.sh          # para: kubectl delete pod -l role=load-generator
 ```
 
-<!-- EVIDENCIAS: preencher com a saída real do kubectl e o link do vídeo -->
+## Evidências (2026-11-20)
+
+Aplicação respondendo pelo load balancer da AWS (`*.us-east-1.elb.amazonaws.com`): `/health-check` 200, registro e login 200, `/auth/me` com cookie 200, `/accounts` sem cookie 401.
+
+HPA durante o teste com 4 geradores de carga:
+
+``` text
+20:54:42  cpu: 0%/50%    réplicas: 1
+20:54:54  cpu: 391%/50%  réplicas: 1
+20:55:05  cpu: 316%/50%  réplicas: 4
+          ... 8 pods do gateway em Running
+```
+
+A CPU subiu para quase 8 vezes a meta e o HPA criou pods até a média voltar perto de 50%. Ao parar a carga, ele volta a 1 réplica depois da janela de estabilização (5 minutos).
+
+Vídeo: _link aqui_
 
 ## Limpeza
 
