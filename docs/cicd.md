@@ -57,3 +57,15 @@ Scan do Trivy no build #4 do Gateway, que liberou a publicação:
 ```
 
 Os builds #1 a #3 do Gateway falharam por configuração e servem de histórico: token do GitHub sem acesso à organização (403) e tempo esgotado no primeiro download da base do Trivy (956 MB), resolvido com um volume de cache (`trivy-cache`) e `--timeout 15m`.
+
+### Logs completos e imagens
+
+Logs dos builds, extraídos do Jenkins (credenciais aparecem mascaradas como `****`):
+[gateway-service #4](evidencias/jenkins-gateway-service-4.log),
+[auth-service #1](evidencias/jenkins-auth-service-1.log),
+[auth #1](evidencias/jenkins-auth-1.log),
+[account #1](evidencias/jenkins-account-1.log).
+
+![dody16/gateway no Docker Hub, tags 4 e latest, amd64 e arm64](evidencias/dockerhub-gateway.png)
+
+![dody16/auth no Docker Hub](evidencias/dockerhub-auth.png)
