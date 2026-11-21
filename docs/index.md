@@ -57,6 +57,9 @@ O front-end sobe com `docker compose up -d` na pasta `web/` e fica em `http://lo
 |---|---|
 | Gateway | [Gateway](gateway.md) |
 | Auth | [Auth](auth.md) |
+| Account | [Account](account.md) |
+| Exchange | [Exchange](exchange.md) |
+| Front-end (loja) | [Front-end](web.md) |
 | Bottlenecks | [Bottlenecks](bottlenecks.md) |
 | CI/CD | [CI/CD com Jenkins](cicd.md) |
 | AWS, EKS e load test | [EKS e load test](eks.md) |
