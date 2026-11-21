@@ -38,3 +38,22 @@ Os valores ficam no cofre do Jenkins e aparecem mascarados nos logs.
 ## Imagens publicadas
 
 `dody16/account`, `dody16/auth`, `dody16/gateway` e `dody16/exchange` no Docker Hub, com as tags `latest` e o número do build. São as imagens usadas pelo deploy no EKS.
+
+## Evidências (2026-11-20)
+
+| Job | Build | Resultado |
+|---|---|---|
+| `account` | #1 | SUCCESS |
+| `auth` | #1 | SUCCESS (disparado pelo `auth-service`) |
+| `auth-service` | #1 | SUCCESS, imagem `dody16/auth:1` e `:latest` no Docker Hub |
+| `gateway-service` | #4 | Build, Scan Image e push de `dody16/gateway:4` e `:latest` |
+
+Scan do Trivy no build #4 do Gateway, que liberou a publicação:
+
+``` text
+│ gateway:scan-4 (ubuntu 26.04) │  ubuntu  │        0        │
+│ app.jar                       │   jar    │        0        │
+│ usr/bin/pebble                │ gobinary │        0        │
+```
+
+Os builds #1 a #3 do Gateway falharam por configuração e servem de histórico: token do GitHub sem acesso à organização (403) e tempo esgotado no primeiro download da base do Trivy (956 MB), resolvido com um volume de cache (`trivy-cache`) e `--timeout 15m`.
