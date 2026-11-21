@@ -63,7 +63,11 @@ HPA durante o teste com 4 geradores de carga:
 
 A CPU subiu para quase 8 vezes a meta e o HPA criou pods até a média voltar perto de 50%. Ao parar a carga, ele volta a 1 réplica depois da janela de estabilização (5 minutos).
 
-Vídeo: _link aqui_
+Vídeo (2min33s, narração com voz sintética Microsoft Maria; carga real no cluster, HPA de 1 a 10 pods):
+
+<video controls width="100%" src="../evidencias/store-douglas.mp4"></video>
+
+[Baixar o vídeo](evidencias/store-douglas.mp4)
 
 ## Limpeza
 

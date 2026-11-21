@@ -56,3 +56,7 @@ Cada entrega foi executada antes do merge: login, Exchange (testes com `pytest` 
 - O ciclo do cache: miss, gravação com TTL, hits, evict; por que `404` não é cacheado e por que não há `@CachePut`.
 - Por que o Prometheus puxa (*pull*) as métricas, por que o `metrics_path` precisa bater com o `base-path` e como ler a taxa de acerto no Grafana.
 - Os dois bugs de CORS: o `Host` sem porta no nginx e a anotação antiga no Account.
+
+## Vídeo do Douglas
+
+O vídeo de apresentação (`docs/evidencias/store-douglas.mp4`) foi montado pela IA: telas de texto, a saída real do `kubectl` durante o load test no EKS (capturada a cada 5 segundos) e narração com a voz sintética "Microsoft Maria" do Windows. O roteiro foi escrito pela IA e o aluno é o responsável pelo conteúdo.
