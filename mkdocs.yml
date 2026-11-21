@@ -132,6 +132,9 @@ nav:
   - Home: index.md
   - Gateway: gateway.md
   - Auth: auth.md
+  - Account: account.md
+  - Exchange: exchange.md
+  - Front-end: web.md
   - Bottlenecks: bottlenecks.md
   - CI/CD: cicd.md
   - EKS e load test: eks.md
