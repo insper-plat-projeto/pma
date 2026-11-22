@@ -4,6 +4,8 @@ Projeto da disciplina **Plataformas, Microsserviços, DevOps e APIs** (Insper, 2
 
 **Documentação:** https://insper-plat-projeto.github.io/pma/
 
+**Vídeo de apresentação:** [docs/evidencias/store-douglas.mp4](docs/evidencias/store-douglas.mp4) (também na página inicial da documentação)
+
 Aplicação de compra e venda em microsserviços, com autenticação JWT, câmbio de moedas, cache com Redis, observabilidade (Prometheus e Grafana), load balancer, CI/CD com Jenkins e deploy no Amazon EKS com autoscaling.
 
 ## Integrantes
@@ -11,7 +13,7 @@ Aplicação de compra e venda em microsserviços, com autenticação JWT, câmbi
 | Integrante | GitHub | Responsável por |
 |---|---|---|
 | Douglas Celestino | [DouglasCelestino](https://github.com/DouglasCelestino) | Gateway, Auth, load balancer, Trivy, Jenkins, EKS, teste de carga, custos |
-| Matheus | [matheuslv](https://github.com/matheuslv) | Account, Exchange, front-end, cache com Redis, Prometheus e Grafana |
+| Matheus Lopes Vilar | [matheuslv](https://github.com/matheuslv) | Account, Exchange, front-end, cache com Redis, Prometheus e Grafana |
 
 ## Repositórios (submódulos em `api/`)
 

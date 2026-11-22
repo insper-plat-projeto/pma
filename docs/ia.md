@@ -31,7 +31,7 @@ Todo o código foi executado antes de entrar no repositório: testes de ponta a 
 - Interface (`auth`) versus implementação (`auth-service`) e o papel do Feign.
 - Como o nginx e o HPA distribuem a carga, e por que o Trivy bloqueia o pipeline.
 
-## Matheus (Account, Exchange, caching, observability e front-end)
+## Matheus Lopes Vilar (Account, Exchange, caching, observability e front-end)
 
 Todas as partes foram feitas em conjunto, a partir do conteúdo da disciplina (aulas, hands-on e o repositório de referência `repo-classes/pma262`) e sob supervisão do aluno. O aluno definiu o escopo e as decisões de cada entrega, acompanhou a implementação, revisou cada mudança, executou os testes e publicou tudo por pull request.
 

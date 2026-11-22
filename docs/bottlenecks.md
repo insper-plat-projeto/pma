@@ -4,8 +4,8 @@ O curso lista cinco bottlenecks: caching, observability, messaging, load balanci
 
 | Bottleneck | Responsável | Onde |
 |---|---|---|
-| Caching (Redis no Account) | Matheus | `api/compose.yaml`, `pma-account-service` |
-| Observability (Prometheus e Grafana) | Matheus | `api/setup/prometheus`, `api/setup/grafana` |
+| Caching (Redis no Account) | Matheus Lopes Vilar | `api/compose.yaml`, `pma-account-service` |
+| Observability (Prometheus e Grafana) | Matheus Lopes Vilar | `api/setup/prometheus`, `api/setup/grafana` |
 | Load balancing | Douglas | `api/setup/nginx/nginx.conf`, `api/compose.yaml`, HPA no EKS |
 | Vulnerability scanning | Douglas | estágio `Scan Image` nos `Jenkinsfile` do Gateway e do Auth |
 

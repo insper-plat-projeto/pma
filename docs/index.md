@@ -4,6 +4,21 @@ Projeto da disciplina **Plataformas, Microsserviços, DevOps e APIs** (Insper, 2
 
 Aplicação de compra e venda em microsserviços, com autenticação JWT, câmbio de moedas, cache, observabilidade, CI/CD e deploy no Amazon EKS com autoscaling.
 
+## Integrantes
+
+| Integrante | GitHub | Responsável por |
+|---|---|---|
+| Douglas Celestino | [DouglasCelestino](https://github.com/DouglasCelestino) | Gateway, Auth, load balancer, Trivy, Jenkins, EKS, teste de carga, custos |
+| Matheus Lopes Vilar | [matheuslv](https://github.com/matheuslv) | Account, Exchange, front-end, cache com Redis, Prometheus e Grafana |
+
+## Vídeo de apresentação
+
+O vídeo do grupo mostra a aplicação rodando no EKS, o teste de carga e o HPA escalando o Gateway de 1 a 10 pods (2min33s). Detalhes em [EKS e load test](eks.md#hpa-e-load-test).
+
+<video controls width="100%" src="evidencias/store-douglas.mp4"></video>
+
+[Baixar o vídeo](evidencias/store-douglas.mp4)
+
 ## Arquitetura
 
 ``` mermaid
@@ -35,9 +50,9 @@ Todo pedido externo entra pelo load balancer e passa pelo Gateway. O Gateway val
 | Gateway | [pma-gateway-service](https://github.com/insper-plat-projeto/pma-gateway-service) | Douglas |
 | Auth (interface) | [pma-auth](https://github.com/insper-plat-projeto/pma-auth) | Douglas |
 | Auth (serviço) | [pma-auth-service](https://github.com/insper-plat-projeto/pma-auth-service) | Douglas |
-| Account (interface) | [pma-account](https://github.com/insper-plat-projeto/pma-account) | Matheus |
-| Account (serviço) | [pma-account-service](https://github.com/insper-plat-projeto/pma-account-service) | Matheus |
-| Exchange | [pma-exchange-service](https://github.com/insper-plat-projeto/pma-exchange-service) | Matheus |
+| Account (interface) | [pma-account](https://github.com/insper-plat-projeto/pma-account) | Matheus Lopes Vilar |
+| Account (serviço) | [pma-account-service](https://github.com/insper-plat-projeto/pma-account-service) | Matheus Lopes Vilar |
+| Exchange | [pma-exchange-service](https://github.com/insper-plat-projeto/pma-exchange-service) | Matheus Lopes Vilar |
 
 ## Como rodar localmente
 
